@@ -1,18 +1,7 @@
 const chalk = require('chalk')
 const yargs = require('yargs')
-const fs = require("fs")
-
-
-function readNotes(){
-  let rawNotes = fs.readFileSync('notes.json')
-  let notes = JSON.parse(rawNotes)
-  return notes
-}
-function writeNotes(notes){
-  let data = JSON.stringify(notes,null,2)
-  fs.writeFileSync('notes.json', data)
-}
-
+const Note = require("./notes")
+const utils = require("./Utils")
 
 yargs.command({
   command:'add',
@@ -30,10 +19,15 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let newNote = {'title':argv.title, 'body':argv.body}
-    let notes = readNotes()
+    let notes = utils.readNotes('notes.json')
+    let index = notes.findIndex(element=>element.title==argv.title)
+    if (index == -1){
+    let newNote = new Note(argv.title, argv.body)
     notes.push(newNote)
-    writeNotes(notes)
+    utils.writeNotes(notes, 'notes.json')
+  }else{
+    console.log(chalk.red('Element with this title is already exist'))
+  }
   }
 })
 
@@ -41,7 +35,7 @@ yargs.command({
   command:'list',
   describe:'List notes',
   handler: function(){
-    let notes = readNotes()
+    let notes = utils.readNotes('notes.json')
     for (let note of notes){
     console.log(note.title)
     }
@@ -59,13 +53,13 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let notes = readNotes()
+    let notes = utils.readNotes('notes.json')
     let index = notes.findIndex(element=>element.title==argv.title)
     if (index == -1){
       console.log(chalk.red('Element was not found'))
     }else{
       notes.splice(index, 1)
-      writeNotes(notes)
+      utils.writeNotes(notes, 'notes.json')
       console.log(chalk.green('Element was deleted'))
     }
   }
@@ -82,7 +76,7 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let notes = readNotes()
+    let notes = utils.readNotes('notes.json')
     let index = notes.findIndex(element=>element.title==argv.title)
     if (index == -1){
       console.log(chalk.red('Element was not found'))
