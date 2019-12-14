@@ -23,7 +23,7 @@ const saveNote = (content) => {
         if (err) {
             console.log(chalk.red.inverse('Something went wrong with writing note to file'))
         } else {
-            console.log(chalk.green.inverse('Note was succsessfully saved'))
+            console.log(chalk.green.inverse('Changes was succsessfully saved'))
         }
     })
 }
@@ -42,11 +42,30 @@ const addNote = (title, text) => {
     })
 }
 
-// const deleteNote = (title) => {
-//     getNotes((notes) => {
-//         console.log(notes)
-//     })
-// }
+const readNote = (title) => {
+    getNotes(notes => {
+        const note = notes.find(n => n.title === title)
+        if (note) {
+            console.log(chalk.blue(note.title))
+            console.log(chalk.yellow(note.text))
+        } else {
+            console.log(chalk.red.inverse(`Note with title "${title}" does not exist`))
+        }
+    })
+}
+
+const deleteNote = (title) => {
+    getNotes(notes => {
+        const updateNotes = notes.filter(item => item.title !== title)
+
+        if (updateNotes.length !== notes.length) {
+            console.log(chalk.green.inverse(`Note with title "${title}" succsessfully removed`))
+            saveNote(updateNotes)
+        } else {
+            console.log(chalk.red.inverse(`Note with title "${title}" does not exist`))
+        }
+    })
+}
 
 const listNote = () => {
     getNotes((notes) => {
@@ -68,5 +87,7 @@ const listNote = () => {
 
 module.exports = {
     addNote,
-    listNote
+    deleteNote,
+    listNote,
+    readNote
 }
