@@ -1,4 +1,5 @@
 const yargs = require('yargs');
+const utils = require('./utils');
 
 yargs.command({
 	command: 'add',
@@ -15,9 +16,9 @@ yargs.command({
 			type: 'string'
 		}
 	},
-	handler: function () {
-		console.log('Adding');
-	}
+	handler: function ({ title, body }) {
+        utils.addNote(title, body);
+    }
 });
 
 yargs.command({
@@ -30,8 +31,8 @@ yargs.command({
 			type: 'string'
 		}
 	},
-	handler: function () {
-		console.log('deleting');
+	handler: function ({ title }) {
+		utils.deleteNote(title);
 	}
 });
 
@@ -46,17 +47,16 @@ yargs.command({
 		}
 	},
 	handler: function () {
-		console.log('reading');
+		console.log(utils.getNotes());
 	}
 });
 
 yargs.command({
 	command: 'list',
 	describe: 'List notes',
-	handler: function () {
-		console.log('listing');
+	handler: function(){
+		console.log(utils.getNotes());
 	}
 });
 
 yargs.parse();
-console.log(yargs.argv);
