@@ -1,4 +1,4 @@
-const note = require('./notes.js/index.js');
+const note = require('./notes.js');
  validator = require('validator'),
  chalk = require('chalk'),
  yargs = require('yargs');
