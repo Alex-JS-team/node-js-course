@@ -7,7 +7,7 @@ const notePath = path.join(__dirname, 'notes.json')
 const getNotes = (callback) => {
     fs.readFile(notePath, 'utf-8', (err, content) => {
         if (err) {
-            console.log(err)
+            console.log(chalk.red.inverse(`Something went wrong with reading your notes: ${err}`))
         }
         try {
             callback(JSON.parse(content))
