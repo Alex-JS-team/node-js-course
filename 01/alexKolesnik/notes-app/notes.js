@@ -7,7 +7,7 @@ const notePath = path.join(__dirname, 'notes.json')
 const getNotes = (callback) => {
     fs.readFile(notePath, 'utf-8', (err, content) => {
         if (err) {
-            throw new Error(err)
+            console.log(err)
         }
         try {
             callback(JSON.parse(content))
