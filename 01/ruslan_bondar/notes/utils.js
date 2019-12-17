@@ -1,11 +1,5 @@
 const fs = require('fs');
 
-const listNotes = () => {
-    let notes = fs.readFileSync('notes.json');
-    let newNotes = JSON.parse(notes);
-    return newNotes;
-};
-
 const addNote = (title, body) => {
     const note = { title, body };
     const notesJSON = fs.readFileSync('notes.json');
@@ -34,6 +28,12 @@ const readNote = title => {
     let newNotes = JSON.parse(notes);
     let singleNote = newNotes.find(note => note.title === title);
     return singleNote;
+};
+
+const listNotes = () => {
+    let notes = fs.readFileSync('notes.json');
+    let newNotes = JSON.parse(notes);
+    return newNotes;
 };
 
 module.exports = {
