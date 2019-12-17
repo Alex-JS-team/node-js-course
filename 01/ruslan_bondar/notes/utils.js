@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-const addNote = (title, body) => {
-    const note = { title, body };
+const addNote = (title, body, id) => {
+    const note = { title, body, id };
     const notesJSON = fs.readFileSync('notes.json');
     const data = JSON.parse(notesJSON);
 
@@ -15,18 +15,18 @@ const addNote = (title, body) => {
     fs.writeFileSync('notes.json', newNote);
 };
 
-const deleteNote = title => {
+const deleteNote = id => {
     const notesJSON = fs.readFileSync('notes.json');
     const data = JSON.parse(notesJSON);
-    const filteredNotes = data.filter(note => note.title !== title);
+    const filteredNotes = data.filter(note => note.id !== id);
     const newNote = JSON.stringify(filteredNotes);
     fs.writeFileSync('notes.json', newNote);
 };
 
-const readNote = title => {
+const readNote = id => {
     let notes = fs.readFileSync('notes.json');
     let newNotes = JSON.parse(notes);
-    let singleNote = newNotes.find(note => note.title === title);
+    let singleNote = newNotes.find(note => note.id === id);
     return singleNote;
 };
 

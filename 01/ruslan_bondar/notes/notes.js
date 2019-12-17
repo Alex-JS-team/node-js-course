@@ -14,10 +14,15 @@ yargs.command({
 			describe: 'Note body',
 			demandOption: true,
 			type: 'string'
+		},
+		id: {
+			describe: 'Note id',
+			demandOption: true,
+			type: 'number'
 		}
 	},
-	handler: function ({ title, body }) {
-        utils.addNote(title, body);
+	handler: function ({ title, body, id }) {
+        utils.addNote(title, body, id);
     }
 });
 
@@ -25,14 +30,14 @@ yargs.command({
 	command: 'delete',
 	describe: 'Delete your notes',
 	builder: {
-		title: {
-			describe: 'Note title',
+		id: {
+			describe: 'Note id',
 			demandOption: true,
-			type: 'string'
+			type: 'number'
 		}
 	},
-	handler: function ({ title }) {
-		utils.deleteNote(title);
+	handler: function ({ id }) {
+		utils.deleteNote(id);
 	}
 });
 
@@ -40,14 +45,14 @@ yargs.command({
 	command: 'read',
 	describe: 'Read your notes',
 	builder: {
-		title: {
-			describe: 'Note title',
+		id: {
+			describe: 'Note id',
 			demandOption: true,
-			type: 'string'
+			type: 'number'
 		}
 	},
-	handler: function ({ title }) {
-		console.log(utils.readNote(title));
+	handler: function ({ id }) {
+		console.log(utils.readNote(id));
 	}
 });
 
