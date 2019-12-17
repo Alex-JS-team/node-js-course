@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const getNotes = () => {
+const listNotes = () => {
     let notes = fs.readFileSync('notes.json');
     let newNotes = JSON.parse(notes);
     return newNotes;
@@ -29,8 +29,16 @@ const deleteNote = title => {
     fs.writeFileSync('notes.json', newNote);
 };
 
+const readNote = title => {
+    let notes = fs.readFileSync('notes.json');
+    let newNotes = JSON.parse(notes);
+    let singleNote = newNotes.find(note => note.title === title);
+    return singleNote;
+};
+
 module.exports = {
-    getNotes,
+    listNotes,
     addNote,
-    deleteNote
+    deleteNote,
+    readNote
 };

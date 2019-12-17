@@ -46,8 +46,8 @@ yargs.command({
 			type: 'string'
 		}
 	},
-	handler: function () {
-		console.log(utils.getNotes());
+	handler: function ({ title }) {
+		console.log(utils.readNote(title));
 	}
 });
 
@@ -55,7 +55,7 @@ yargs.command({
 	command: 'list',
 	describe: 'List notes',
 	handler: function(){
-		console.log(utils.getNotes());
+		console.log(utils.listNotes());
 	}
 });
 
