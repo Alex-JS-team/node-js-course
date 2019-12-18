@@ -41,4 +41,7 @@ Nots APP.
 where "start" and "stop" are titles, and "start working on application" and "stop working on application" are descriptions.
 The data has to be stored in notes.json.
 
-4. Add new command 'restore' with the file name.
+4. Add new command 'import' with the file name.
+```
+node app.js import --file="notes.txt"
+```
