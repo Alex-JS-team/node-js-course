@@ -38,7 +38,7 @@ Nots APP.
 1. start - start working on application
 2. stop - stop working on application
 ```
-where "start" and "stop" are title, and "start working on application" and "stop working on application" are description.
+where "start" and "stop" are titles, and "start working on application" and "stop working on application" are descriptions.
 The data has to be stored in notes.json.
 
-4. Add new command 'restore' with file name.
+4. Add new command 'restore' with the file name.
