@@ -43,7 +43,7 @@ const importNotes = file => {
     for (let i = 0; i < notes.length; i++) {
         let data = notes[i].split('-');
         addNote(data[0].trim(), data[1].trim());
-        noteList.push(data[i]);
+        noteList.push(data);
     };
 };
 
