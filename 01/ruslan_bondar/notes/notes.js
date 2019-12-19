@@ -21,9 +21,7 @@ yargs.command({
 			type: 'number'
 		}
 	},
-	handler: function ({ title, body, id }) {
-        utils.addNote(title, body, id);
-    }
+	handler: ({ title, body, id }) => utils.addNote(title, body, id)
 });
 
 yargs.command({
@@ -36,9 +34,7 @@ yargs.command({
 			type: 'number'
 		}
 	},
-	handler: function ({ id }) {
-		utils.deleteNote(id);
-	}
+	handler: ({ id }) => utils.deleteNote(id)
 });
 
 yargs.command({
@@ -51,17 +47,13 @@ yargs.command({
 			type: 'number'
 		}
 	},
-	handler: function ({ id }) {
-		console.log(utils.readNote(id));
-	}
+	handler: ({ id }) => console.log(utils.readNote(id))
 });
 
 yargs.command({
 	command: 'list',
 	describe: 'List notes',
-	handler: function(){
-		console.log(utils.listNotes());
-	}
+	handler: () => console.log(utils.listNotes())
 });
 
 yargs.parse();
