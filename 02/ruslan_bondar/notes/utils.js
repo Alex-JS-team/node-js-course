@@ -38,8 +38,13 @@ const listNotes = () => {
 
 const importNotes = file => {
     const notes = fs.readFileSync(file).toString().split('\n');
+    const noteList = [];
 
-    fs.writeFileSync('notes.json', notes);
+    for (let i = 0; i < notes.length; i++) {
+        let data = notes[i].split('-');
+        addNote(data[0].trim(), data[1].trim());
+        noteList.push(data[i]);
+    };
 };
 
 module.exports = {
