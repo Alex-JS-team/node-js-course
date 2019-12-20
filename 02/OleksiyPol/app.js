@@ -1,8 +1,5 @@
-const chalk = require('chalk')
 const yargs = require('yargs')
-const Note = require("./notemodel")
-const utils = require("./Utils")
-const fs = require("fs")
+const notes = require('./notes')
 
 yargs.command({
   command:'add',
@@ -20,15 +17,8 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let notes = utils.readNotes('notes.json')
-    let index = notes.findIndex(element=>element.title==argv.title)
-    if (index == -1){
-    let newNote = new Note(argv.title, argv.body)
-    notes.push(newNote)
-    utils.writeNotes(notes, 'notes.json')
-  }else{
-    console.log(chalk.red('Element with this title is already exist'))
-  }
+    notes.addNote(argv.title, argv.body, 'notes.json')
+   
   }
 })
 
@@ -36,10 +26,8 @@ yargs.command({
   command:'list',
   describe:'List notes',
   handler: function(){
-    let notes = utils.readNotes('notes.json')
-    for (let note of notes){
-    console.log(note.title)
-    }
+    notes.list('notes.json')
+    
   }
 })
 
@@ -54,15 +42,9 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let notes = utils.readNotes('notes.json')
-    let index = notes.findIndex(element=>element.title==argv.title)
-    if (index == -1){
-      console.log(chalk.red('Element was not found'))
-    }else{
-      notes.splice(index, 1)
-      utils.writeNotes(notes, 'notes.json')
-      console.log(chalk.green('Element was deleted'))
-    }
+
+    notes.deleteNote(argv.title, 'notes.json')
+    
   }
 })
 
@@ -77,14 +59,8 @@ yargs.command({
     }
   },
   handler: function(argv){
-    let notes = utils.readNotes('notes.json')
-    let index = notes.findIndex(element=>element.title==argv.title)
-    if (index == -1){
-      console.log(chalk.red('Element was not found'))
-    }else{
-      console.log(chalk.green(notes[index].body))
+    notes.details(argv.title, 'notes.json')
     }
-  }
 })
 
 yargs.command({
@@ -98,14 +74,7 @@ yargs.command({
     }
   },
   handler: function (argv){
-  let notesArray = []
-  let notes = fs.readFileSync(argv.file).toString().split('\n')
-  for (let i=0; i<notes.length; i++) {
-      let splitNote = notes[i].split('-')
-      let note = new Note(splitNote[0].trim(), splitNote[1].trim())
-      notesArray.push(note)
-  }
-  utils.writeNotes(notesArray, 'notes.json')
+    notes.importFile(argv.file, 'notes.json')
 }
 })
 
