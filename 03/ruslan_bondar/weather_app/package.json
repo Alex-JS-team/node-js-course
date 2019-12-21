@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "request": "^2.88.0"
+    "chalk": "^3.0.0",
+    "request": "^2.88.0",
+    "terminal-kit": "^1.32.2"
   }
 }
