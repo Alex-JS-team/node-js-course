@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 const utils = require('./utils');
-const term = require( 'terminal-kit' ).terminal;
+const term = require('terminal-kit').terminal;
 
 const searchQuery = process.argv.slice(2);
 
