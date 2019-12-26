@@ -11,7 +11,6 @@ function showData(item, callback) {
     }else {
       if(item === 'time') {
         console.log(chalk.black.bgWhite.bold(new Date(response[item])));
-        console.log()
         callback()
       }else {
         console.log(chalk.black.bgGreen.bold(`${item}: ${response[item]}`));
@@ -21,7 +20,7 @@ function showData(item, callback) {
   });
 }
 
-term.cyan( 'Метеоданные Алькатрасе.\n' ) ;
+term.cyan( 'Метеоданные Алькатраса.\n' );
 
 var items = [
   'summary',
@@ -31,13 +30,6 @@ var items = [
 ] ;
 
 term.singleColumnMenu( items , function( error , response ) {
-  term( '\n' ).eraseLineAfter.green(
-      "#%s selected: %s (%s,%s)\n" ,
-      response.selectedIndex ,
-      response.selectedText ,
-      response.x ,
-      response.y
-  );
   if(response.selectedText) {
     showData(`${response.selectedText}`, process.exit)
   }
