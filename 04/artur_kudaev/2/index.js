@@ -4,7 +4,7 @@ const config = require('./config.js');
 
 const app = express();
 
-app.use('/public', express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/api', (req, res) => {
   res.send({
