@@ -1,5 +1,5 @@
 # 06
-Express JS
+HTTP
 Presentation: https://docs.google.com/presentation/d/1rW-fbwAs-RDu3TK5y8o1WXDkk0_kI12bUFt-DwR17Uo/edit?usp=sharing
 
 ## Home work
