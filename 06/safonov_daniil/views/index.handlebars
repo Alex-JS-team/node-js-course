@@ -1,0 +1,86 @@
+<div class="hero" data-bg-image="images/1.jpg">
+    <div class="container">
+        <form method="GET" action="/" class="find-location">
+            <input name="city" id="search_input" type="text" placeholder="Find your location...">
+            <input id="search_button" type="submit" value="Find">
+        </form>
+        {{!-- <script>
+            const btn = document.querySelector('#search_button');
+            const value = document.querySelector('#search_input');
+            btn.addEventListener('click', ()=>{
+                console.log(value.value);
+            });
+        </script> --}}
+    </div>
+</div>
+<div class="forecast-table">
+    <div class="container">
+        <div class="forecast-container">
+            <div class="today forecast">
+                <div class="forecast-header">
+                    <div class="day">Today</div>
+                </div>
+                <div class="forecast-content">
+                    <div class="location">New York</div>
+                    <div class="degree">
+                        <div class="num">{{todayTemperature}}<sup>o</sup>C</div>
+                        <div class="forecast-icon">
+                            <img src="{{todayIcon}}" alt="" width="90">
+                        </div>
+                    </div>
+                    <span><img src="images/icon-umberella.png" alt="">{{todayPrecipProbability}} %</span>
+                    <span><img src="images/icon-wind.png" alt="">{{todayWindSpeed}} km/h</span>
+                    <span><img src="images/icon-compass.png" alt="">{{todayHumidity}}</span>
+                </div>
+            </div>
+            <div class="today forecast">
+                <div class="forecast-header">
+                    <div class="day">Tomorrow</div>
+                </div>
+                <div class="forecast-content">
+                    <div class="degree">
+                        <div class="num">{{tomorrowTemperature}}<sup>o</sup>C</div>
+                        <div class="forecast-icon">
+                            <img src="{{tomorrowIcon}}" alt="" width="90">
+                        </div>
+                    </div>
+                    <span><img src="images/icon-umberella.png" alt="">{{tomorrowPrecipProbability}} %</span>
+                    <span><img src="images/icon-wind.png" alt="">{{tomorrowWindSpeed}} km/h</span>
+                    <span><img src="images/icon-compass.png" alt="">{{tomorrowHumidity}}</span>
+                </div>
+            </div>
+            <div class="today forecast">
+                <div class="forecast-header">
+                    <div class="day">After Tomorrow</div>
+                </div> 
+                <div class="forecast-content">
+                    <div class="degree">
+                        <div class="num">{{afterTomorrowTemperature}}<sup>o</sup>C</div>
+                        <div class="forecast-icon">
+                            <img src="{{afterTomorrowIcon}}" alt="" width="90">
+                        </div>
+                    </div>
+                    <span><img src="images/icon-umberella.png" alt="">{{afterTomorrowPrecipProbability}} %</span>
+                    <span><img src="images/icon-wind.png" alt="">{{afterTomorrowWindSpeed}} km/h</span>
+                    <span><img src="images/icon-compass.png" alt="">{{afterTomorrowHumidity}}</span>
+                </div>
+            </div>
+
+            
+          
+            {{!-- <div class="forecast">
+                <div class="forecast-header">
+                    <div class="day">Sunday</div>
+                </div>
+                <div class="forecast-content">
+                    <div class="forecast-icon">
+                        <img src="images/icons/icon-14.svg" alt="" width=48>
+                    </div>
+                    <div class="degree">23<sup>o</sup>C</div>
+                    <small>18<sup>o</sup></small>
+                </div>
+            </div> --}}
+
+        </div>
+    </div>
+</div>
