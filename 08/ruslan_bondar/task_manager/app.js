@@ -10,28 +10,26 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
 	const db = client.db(databaseName);
 
-	db.collection('users').insertOne({
-		name: 'Andrew',
-		age: 27
-	}, (error, result) => {
-		if (error) {
-			return console.log('Unable to insert user')
-		}
+	db.collection('users').insertOne({ name: 'Andrew', age: 27 })
+		.then(result => db.collection('users').deleteOne({ _id: ObjectID }))
 
-		console.log(result.ops)
-	});
 
-	db.collection('users').find({
-		name: 'Andrew'
-	}).toArray((error, result) => {
-		console.log(result);
-	});
 
-	db.collection('users').deleteOne({
-		name: 'Andrew'
-	}, (error, result) => {
-		if (error) {
-			return console.log('Unable to delete user')
-		}
-	});
+
+
+	
+
+	// db.collection('users').find({
+	// 	name: 'Andrew'
+	// }).toArray((error, result) => {
+	// 	console.log(result);
+	// });
+
+	// db.collection('users').deleteOne({
+	// 	name: 'Andrew'
+	// }, (error, result) => {
+	// 	if (error) {
+	// 		return console.log('Unable to delete user');
+	// 	}
+	// });
 });
