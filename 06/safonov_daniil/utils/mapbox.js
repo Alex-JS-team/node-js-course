@@ -19,6 +19,27 @@ getLocation = (city, callback) => {
     });
 }
 
+getLocationPromise = (city) => {
+    return new Promise((resolve, reject) => {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${city}.json?access_token=${$token}`;
+        request({ url: url, json: true }, function (error, response, body) {
+            if (error) {
+                console.log(`Error: ${error}`);
+                reject(error);
+            } else if (response.statusCode != 200) {
+                console.log(`Error: ${response.statusCode}`);
+                reject(error);
+            } else {
+                const sityCoords = [body.features[0].center[1], body.features[0].center[0]];
+                const sity = body.features[0].text;
+                const sityInfo = { sityCoords: sityCoords, sityName: sity };
+                resolve(sityInfo);
+            }
+        });
+    });
+}
+
 module.exports = {
+    getLocationPromise: getLocationPromise,
     getLocation: getLocation,
 }
