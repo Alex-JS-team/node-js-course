@@ -56,19 +56,19 @@ app.get('/form', (req, res) => {
 });
 
 app.post('/save', jsonParser, function(req, res){
-  if(!req.body) return res.sendStatus(400);
+  if(!req.body) return res.sendStatus(500);
   const user = new User({
     name: req.body.userName,
     age: req.body.age
   });
-  user.save().then(user=>console.log(`Save: ${user}`))
-  res.sendStatus(200)
+  user.save().then(user=>console.log(`Save: ${user}`));
+  res.sendStatus(200);
 });
 
 app.post('/del', jsonParser, function(req, res){
   if(!req.body) return res.sendStatus(400);
   const id = req.body.id;
-  User.deleteOne({_id: id}).then(del => console.log(del) )
+  User.deleteOne({_id: id}).then(del => console.log(del) );
   console.log(id)
   res.sendStatus(200)
 });
