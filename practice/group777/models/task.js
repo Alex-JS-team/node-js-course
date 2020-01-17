@@ -3,8 +3,15 @@ const Schema = mongoose.Schema;
 
 
 const taskScheme = new Schema({
-  title: String,
-  status: Boolean
+  title: {
+    type: String,
+    required: true,
+    minlength: 10
+  },
+  status: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const Task = mongoose.model("Task", taskScheme);

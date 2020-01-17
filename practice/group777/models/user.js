@@ -3,8 +3,16 @@ const Schema = mongoose.Schema;
 
 
 const userScheme = new Schema({
-  name: String,
-  age: Number
+  name: {
+    type: String,
+    required: true,
+    minlength: 5
+  },
+  age: {
+    type: Number,
+    min: 1,
+    max: 150
+  }
 });
 
 const User = mongoose.model("User", userScheme);
