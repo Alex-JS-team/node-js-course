@@ -1,5 +1,3 @@
-const validator = require('validator');
-const connect = require('./connect');
 const mongoose = require('mongoose');
 
 const Task = mongoose.model('Task', {

@@ -1,56 +1,66 @@
 const express = require('express');
-const connect = require('./connect');
 const mongoose = require('mongoose');
+const user = require('./User');
+const task = require('./Task');
 
 const app = express();
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
     useNewUrlParser: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true
 });
 
-const User = mongoose.model('User', mongoose.Schema());
+app.get('/', (req, res) => {
+    res.write('<html>');
+    res.write('<body>');
+    res.write('<div style="padding: 25px"><a href="/users">Users<a/></div>');
+    res.write('<div style="padding: 25px"><a href="/tasks">Tasks<a/></div>');
+    res.write('</body>');
+    res.write('</html>');
+    return res.end();
+});
 
 app.get('/users', (req, res) => {
-    console.log(req.query)
     if (req.query.id) {
-        User.findById(req.query.id).then((users) => {
+        user.User.findById(req.query.id).then((users) => {
             res.send(users);
         });
     } else {
-        User.find().then((users) => {
+        user.User.find().then((users) => {
             res.send(users);
         });
     }
 });
 
+// const newTask = new task.Task({
+//     description: 'Drink coffee',
+//     completed: false
+// });
+
+// newTask.save();
+
+app.get('/tasks', (req, res) => {
+    if (req.query.id) {
+        task.Task.findById(req.query.id).then((tasks) => {
+            res.send(tasks);
+        });
+    } else {
+        task.Task.find().then((tasks) => {
+            res.send(tasks);
+        });
+    }
+});
+
+// app.post('/users', (req, res) => {
+//     user.User.insertMany(
+//         [
+//             { name: 'Andrew', age: 30 },
+//             { name: 'Ross', age: 40 }
+//         ]
+//     ).then((users) => {
+//         res.send(users);
+//     })
+// });
+
 app.listen(3000);
-
-
-
-
-
-
-
-
-
-
-
-
-// me.save().then(() => {
-//     console.log(me)
-// }).catch((error) => {
-//     console.log('Error!', error)
-// })
-
-
-
-// const task = new Task({
-//     description: '  Eat lunch'
-// })
-
-// task.save().then(() => {
-//     console.log(task)
-// }).catch((error) => {
-//     console.log(error)
-// })
