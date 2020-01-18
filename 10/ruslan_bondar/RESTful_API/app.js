@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const user = require('./User');
-const task = require('./Task');
+const User = require('./User');
+const Task = require('./Task');
 
 const app = express();
+app.use(express.json());
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
     useNewUrlParser: true,
@@ -23,44 +24,86 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
     if (req.query.id) {
-        user.User.findById(req.query.id).then((users) => {
+        User.findById(req.query.id).then((users) => {
             res.send(users);
         });
     } else {
-        user.User.find().then((users) => {
+        User.find().then((users) => {
             res.send(users);
         });
     }
 });
 
-// const newTask = new task.Task({
-//     description: 'Drink coffee',
-//     completed: false
-// });
+app.post('/users', (req, res) => {
+    const newUser = new User(req.body);
 
-// newTask.save();
+    newUser.save().then((user) => {
+        res.status(201).send(user)
+    }).catch((error) => {
+        res.status(500).send(error);
+    })
+});
+
+app.delete('/users', (req, res) => {
+    User.deleteMany(req.body).then((user) => {
+        res.status(201).send(user)
+    }).catch((error) => {
+        res.status(500).send(error);
+    })
+});
+
+app.patch('/users/:id', async (req, res) => {
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['name', 'email', 'password', 'age']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+    
+        if (!user) {
+            return res.status(404).send()
+        }
+
+        res.send(user)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+});
+
+// tasks ---------------------->
 
 app.get('/tasks', (req, res) => {
     if (req.query.id) {
-        task.Task.findById(req.query.id).then((tasks) => {
+        Task.findById(req.query.id).then((tasks) => {
             res.send(tasks);
         });
     } else {
-        task.Task.find().then((tasks) => {
+        Task.find().then((tasks) => {
             res.send(tasks);
         });
     }
 });
 
-// app.post('/users', (req, res) => {
-//     user.User.insertMany(
-//         [
-//             { name: 'Andrew', age: 30 },
-//             { name: 'Ross', age: 40 }
-//         ]
-//     ).then((users) => {
-//         res.send(users);
-//     })
-// });
+app.post('/tasks', (req, res) => {
+    const newTask = new Task(req.body);
+
+    newTask.save().then((task) => {
+        res.status(201).send(task)
+    }).catch((error) => {
+        res.status(500).send(error);
+    })
+});
+
+app.delete('/tasks', (req, res) => {
+    Task.deleteMany(req.body).then((task) => {
+        res.status(201).send(task)
+    }).catch((error) => {
+        res.status(500).send(error);
+    })
+});
 
 app.listen(3000);
