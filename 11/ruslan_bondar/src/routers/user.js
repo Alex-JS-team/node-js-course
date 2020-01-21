@@ -1,6 +1,7 @@
 const express = require('express')
 const User = require('../models/user')
 const router = new express.Router()
+const bcrypt = require('bcryptjs')
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
@@ -74,6 +75,29 @@ router.delete('/users/:id', async (req, res) => {
         res.send(user)
     } catch (e) {
         res.status(500).send()
+    }
+})
+
+router.post('/login', async (req, res) => {
+
+    try {
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            throw new Error('no user')
+        }
+
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+        if (isMatch) {
+            res.status(200).send(user)
+        } else {
+            throw new Error('login error')
+        }
+
+        await user.save()
+    } catch (e) {
+        res.status(400).send(e)
     }
 })
 
