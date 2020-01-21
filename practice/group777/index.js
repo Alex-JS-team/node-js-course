@@ -6,16 +6,38 @@ const User = require('./models/user');
 const bodyParser = require("body-parser");
 const path = require('path');
 const hbs = require("hbs");
+const userRouter = require('./routes/users')
+const taskRouter = require('./routes/tasks')
+const bcrypt = require('bcryptjs')
+
+const myFunction = async () => {
+  const password = 'Red12345!'
+  const hashedPassword = await bcrypt.hash(password, 10)
+
+  console.log(password)
+  console.log(hashedPassword)
+
+  const isMatch = await bcrypt.compare('Red12345!', hashedPassword)
+  console.log(isMatch)
+}
+
+myFunction()
+
+
 
 mongoose.connect('mongodb://localhost:27017/task-manager-api', {useNewUrlParser: true});
 
 const jsonParser = bodyParser.json();
+app.use(express.json())
 
 app.use(express.static(path.join(__dirname, '/public'), {index: false}));
 
 //Увеличиваю позволенный размер файла
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
+app.use(userRouter)
+app.use(taskRouter)
 
 app.set("view engine", "hbs");
 hbs.registerPartials(__dirname + "/views/partials");
@@ -44,65 +66,6 @@ app.get('/api', async function (req, res) {
   res.send(json)
 });
 
-app.get('/user', async function (req, res) {
-  const users = await User.find();
-  res.send(users)
-});
-
-app.get('/user/:id', async function (req, res) {
-  const user = await User.find({_id: req.params.id});
-  res.send(user)
-});
-
-app.post('/user', jsonParser, function (req, res) {
-  if(!req.body) return res.sendStatus(500);
-  const user = new User({
-    name: req.body.userName,
-    age: req.body.age
-  });
-  console.log(user)
-  user.save()
-      .then(user=>{
-        res.sendStatus(200);
-        console.log(`Save: ${user}`)
-      })
-      .catch((e) => {
-        if(e.errors['age']) {
-          console.log(e.errors['age']);
-          res.sendStatus(525)
-        }else if(e.errors['name']) {
-          console.log(e.errors['name']);
-          res.sendStatus(526)
-        }
-      })
-});
-
-app.post('/task', jsonParser, function (req, res) {
-  if(!req.body) return res.sendStatus(500);
-  const task = new Task({
-    title: req.body.title,
-    status: req.body.status
-  });
-  console.log(task);
-  task.save()
-      .then(task=>{
-        console.log(`Save: ${task}`);
-        res.sendStatus(200)
-      })
-      .catch((e) => {
-        if(e.errors['title']) {
-          console.log(e.errors['title']);
-          res.sendStatus(527)
-        }
-      });
-  ;
-});
-
-app.get('/task/:id', async function (req, res) {
-  const task = await Task.find({_id: req.params.id});
-  res.send(task)
-});
-
 app.delete('/del/:id', function (req, res) {
   console.log(req.params.id);
   User.deleteOne({_id: req.params.id})
@@ -121,6 +84,32 @@ app.delete('/del/:id', function (req, res) {
     });
   res.sendStatus(200);
 });
+
+app.patch('/users/:id', async (req, res) => {
+  const updates = Object.keys(req.body)
+  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid updates!' })
+  }
+
+  try {
+    //const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+    const user = await User.findById(req.params.id);
+    // user.name = req.body.name;
+    // user.save();
+    const updatedUser = req.body.name;
+    updatedUser.save();
+    if (!user) {
+      return res.status(404).send()
+    }
+
+    res.send(updatedUser)
+  } catch (e) {
+    res.status(400).send(e)
+  }
+})
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
