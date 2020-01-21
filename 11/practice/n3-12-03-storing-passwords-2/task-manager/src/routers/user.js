@@ -2,7 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const router = new express.Router()
 
-router.post('/users', async (req, res) => {
+router.post('/users', async(req, res) => {
     const user = new User(req.body)
 
     try {
@@ -13,7 +13,48 @@ router.post('/users', async (req, res) => {
     }
 })
 
-router.get('/users', async (req, res) => {
+router.get('/users/me', auth, async(req, res) => {
+    res.send(req.user)
+})
+
+
+router.post('/users/login', async(req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = await user.generateAuthToken()
+        res.send({ user, token })
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
+// router.post('/login', async(req, res) => {
+
+
+//     try {
+//         const user = await User.findOne({
+//             email: req.body.email
+//         })
+
+//         if (!user) {
+//             throw new Error('Login error!')
+//         }
+
+//         const isMatch = await bcrypt.compare(req.body.password, user.password)
+
+//         if (isMatch) {
+//             const token = jwt.sign({ id: user._id.toString(), name: user.name }, 'thisismynewcourse', { expiresIn: '7 days' })
+//             res.send(token)
+//         } else {
+//             throw new Error('Login error!')
+
+//         }
+//     } catch (e) {
+//         res.status(400).send(e)
+//     }
+// })
+
+router.get('/users', async(req, res) => {
     try {
         const users = await User.find({})
         res.send(users)
@@ -22,7 +63,7 @@ router.get('/users', async (req, res) => {
     }
 })
 
-router.get('/users/:id', async (req, res) => {
+router.get('/users/:id', async(req, res) => {
     const _id = req.params.id
 
     try {
@@ -38,7 +79,7 @@ router.get('/users/:id', async (req, res) => {
     }
 })
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/:id', async(req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'email', 'password', 'age']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -63,7 +104,7 @@ router.patch('/users/:id', async (req, res) => {
     }
 })
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/:id', async(req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id)
 
