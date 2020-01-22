@@ -1,0 +1,2 @@
+start - start working on application
+stop - stop working on application

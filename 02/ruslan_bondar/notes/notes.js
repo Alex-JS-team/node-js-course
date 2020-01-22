@@ -56,4 +56,17 @@ yargs.command({
 	handler: () => console.log(utils.listNotes())
 });
 
+yargs.command({
+	command: 'import',
+	describe: 'import your notes',
+	builder: {
+		file: {
+			describe: 'backup file',
+			demandOption: true,
+			type: 'string'
+		}
+	},
+	handler: ({ file }) => utils.importNotes(file)
+});
+
 yargs.parse();
