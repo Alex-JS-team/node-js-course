@@ -2,6 +2,8 @@ const express = require('express')
 const User = require('../models/user')
 const router = new express.Router()
 const bcrypt = require('bcryptjs')
+const auth = require('../middleware/auth')
+const jwt = require('jsonwebtoken')
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
@@ -21,6 +23,10 @@ router.get('/users', async (req, res) => {
     } catch (e) {
         res.status(500).send()
     }
+})
+
+router.get('/users/me', auth, async(req, res) => {
+    res.send(req.user)
 })
 
 router.get('/users/:id', async (req, res) => {
@@ -90,6 +96,7 @@ router.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(req.body.password, user.password);
 
         if (isMatch) {
+            user.generateAuthToken();
             res.status(200).send(user)
         } else {
             throw new Error('login error')
@@ -98,6 +105,23 @@ router.post('/login', async (req, res) => {
         await user.save()
     } catch (e) {
         res.status(400).send(e)
+    }
+})
+
+router.post('/sign', async (req, res) => {
+    try {
+        const newUser = {
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+            age: req.body.age
+        }
+        console.log(newUser);
+        const user = new User(newUser);
+        user.save();
+        res.send('ok');
+    } catch {
+
     }
 })
 
