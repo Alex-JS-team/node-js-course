@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const config = require('./../config')
+const config = require('./../config');
+const jwt = require('jsonwebtoken');
 
 const userScheme = new Schema({
   name: {
@@ -42,15 +43,7 @@ const userScheme = new Schema({
 
 });
 
-userScheme.pre('save', async function f(next) {
-  const user = this;
-  user.password = await bcrypt.hash(user.password, 8);
-  next();
-});
 
-userScheme.methods.findSimilarTypes = function() {
-  return [1,2,3,4,5];
-};;
 
 userScheme.methods.generateAuthToken = async function() {
   const user = this;
@@ -61,6 +54,14 @@ userScheme.methods.generateAuthToken = async function() {
 
   return token;
 };
+
+userScheme.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8)
+  }
+  next();
+});
 
 const User = mongoose.model("User", userScheme);
 

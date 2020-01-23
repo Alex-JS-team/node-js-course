@@ -10,6 +10,7 @@ const formRouter = require('./routers/form');
 const startRouter = require('./routers/start');
 const loginRouter = require('./routers/login');
 const {port} = require('./config');
+const jwt = require('jsonwebtoken');
 require('./mangoose');
 
 app.use(express.static(path.join(__dirname, '/public'), {index: false}));
