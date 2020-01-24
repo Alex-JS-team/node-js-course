@@ -142,11 +142,15 @@ try {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then((res) => {
-      console.log(JSON.stringify(data), res)
-      if(res.redirected) {
-        location.href = '/form'
-      }
+    }).then( (res) => {
+      console.log(JSON.stringify(data), res);
+
+      res.json().then(function(data) {
+        data.token ? localStorage.setItem('tokenManagerAPI', data.token) : null;
+        if(data.redirect) {
+          location.href = data.redirectUrl
+        }
+      });
     });
 
   })

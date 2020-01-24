@@ -16,7 +16,12 @@ router.post('/login', async function (req, res) {
   console.log(isMatch, '++++++++')
   const token = await user.generateAuthToken();
   console.log(token, '----------');
-  isMatch ? res.redirect(301, '/form') : res.status(401).send({ error: 'Please authenticate.' });
+  const data = {
+    token,
+    redirect: true,
+    redirectUrl: '/form'
+  };
+  isMatch ? res.send(data) : res.status(401).send({ error: 'Please authenticate.' });
   //res.status(401).send({ error: 'No find user' });
 });
 

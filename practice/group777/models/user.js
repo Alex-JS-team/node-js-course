@@ -40,10 +40,7 @@ const userScheme = new Schema({
         required: true
       }
   }]
-
 });
-
-
 
 userScheme.methods.generateAuthToken = async function() {
   const user = this;
@@ -64,6 +61,5 @@ userScheme.pre('save', async function (next) {
 });
 
 const User = mongoose.model("User", userScheme);
-
 
 module.exports = User;
