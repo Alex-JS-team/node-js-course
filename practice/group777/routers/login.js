@@ -9,13 +9,9 @@ router.get('/login', function (req, res) {
 
 router.post('/login', async function (req, res) {
   if(!req.body) return res.sendStatus(500);
-  console.log(req.body)
   const user = await User.findOne({email: req.body.email});
-  console.log(user)
   const isMatch = await bcrypt.compare(req.body.password, user.password);
-  console.log(isMatch, '++++++++')
   const token = await user.generateAuthToken();
-  console.log(token, '----------');
   const data = {
     token,
     redirect: true,
