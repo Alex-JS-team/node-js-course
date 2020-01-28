@@ -40,6 +40,8 @@ const userScheme = new Schema({
         required: true
       }
   }]
+}, {
+  timestamps: true
 });
 
 userScheme.methods.generateAuthToken = async function() {

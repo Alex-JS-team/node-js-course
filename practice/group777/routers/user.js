@@ -12,7 +12,7 @@ router.get('/user/:id', async function (req, res) {
   res.send(user)
 });
 
-router.post('/user', function (req, res) {
+router.post('/registration', async function (req, res) {
   if(!req.body) return res.sendStatus(500);
   const user = new User({
     name: req.body.userName,
@@ -21,15 +21,17 @@ router.post('/user', function (req, res) {
     password: req.body.password
   });
   console.log('body:', user);
+  const token = await user.generateAuthToken();
+  console.log(token)
   user.save()
-      .then(user=>{
-        res.sendStatus(200);
-        console.log(`Save: ${user}`);
-      })
-      .catch((e) => {
-        console.log(e.errmsg);
-        res.status(501).send([{error: e.errmsg}]);
-      })
+    .then(user=>{
+      res.send({token});
+      console.log(`Save: ${user}`);
+    })
+    .catch((e) => {
+      console.log(e.errmsg);
+      res.status(501).send([{error: e.errmsg}]);
+    })
 });
 
 module.exports = router;
