@@ -54,14 +54,14 @@ router.post('/users/login', async(req, res) => {
 //     }
 // })
 
-router.get('/users', async(req, res) => {
-    try {
-        const users = await User.find({})
-        res.send(users)
-    } catch (e) {
-        res.status(500).send()
-    }
-})
+// router.get('/users', async(req, res) => {
+//     try {
+//         const users = await User.find({})
+//         res.send(users)
+//     } catch (e) {
+//         res.status(500).send()
+//     }
+// })
 
 router.get('/users/:id', async(req, res) => {
     const _id = req.params.id
