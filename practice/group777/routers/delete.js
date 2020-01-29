@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('./../models/user');
 const Task = require('./../models/task');
+const auth = require('./../midlleware/auth');
 
-router.delete('/del/:id', function (req, res) {
+router.delete('/del/:id', auth, function (req, res) {
   console.log(req.params.id);
   User.deleteOne({_id: req.params.id})
       .then(del => {

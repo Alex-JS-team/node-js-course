@@ -1,24 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('./../models/task');
+const auth = require('./../midlleware/auth');
 
-router.post('/task', function (req, res) {
+router.post('/task', auth, function (req, res) {
   if(!req.body) return res.sendStatus(500);
   const task = new Task({
     title: req.body.title,
-    status: req.body.status
+    owner: req.user._id
   });
   console.log(task);
   task.save()
       .then(task=>{
         console.log(`Save: ${task}`);
-        res.sendStatus(200)
+        res.send(task)
       })
       .catch((e) => {
-        if(e.errors['title']) {
-          console.log(e.errors['title']);
-          res.sendStatus(527)
-        }
+        console.log(e)
       });
 });
 

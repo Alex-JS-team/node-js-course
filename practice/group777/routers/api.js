@@ -1,18 +1,26 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const User = require('./../models/user');
 const Task = require('./../models/task');
 const auth = require('./../midlleware/auth');
 
-router.get('/api', async function (req, res) {
-  const users = await User.find();
-  const tasks = await Task.find();
-  const json = [{
-    users: users,
-    tasks: tasks,
-  }
-  ];
-  res.send(json)
+
+router.get('/api', auth, async function (req, res) {
+  // const users = await User.find();
+  const id = mongoose.Types.ObjectId(req.user.id)
+  console.log(id, '-*-*-')
+  const tasks = await Task.find({owner: id});
+  // const json = [{
+  //   users: users,
+  //   tasks: tasks,
+  // }
+  // ];
+  console.log(tasks)
+  res.send({
+    user: req.user,
+    tasks
+  })
 });
 
 module.exports = router;
