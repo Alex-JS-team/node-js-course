@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('./../models/user');
+const auth = require('./../midlleware/auth')
 
 router.get('/user', async function (req, res) {
   const users = await User.find();
@@ -8,7 +9,7 @@ router.get('/user', async function (req, res) {
 });
 
 router.get('/user/:id', async function (req, res) {
-  const user = await User.find({_id: req.params.id});
+  const user = await User.findOne({_id: req.params.id});
   res.send(user)
 });
 
@@ -32,6 +33,18 @@ router.post('/registration', async function (req, res) {
       console.log(e.errmsg);
       res.status(501).send([{error: e.errmsg}]);
     })
+});
+
+router.get('/user/:id/avatar', async (req, res) => {
+  try {
+    const user = await User.findOne({_id: req.params.id});
+    if(!user || !user.avatar) throw new Error('Error avatar');
+
+    res.set('Content-Type', 'image/jpg');
+    res.send(user.avatar);
+  }catch (e) {
+    console.log(e)
+  }
 });
 
 module.exports = router;

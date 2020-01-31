@@ -39,7 +39,13 @@ const userScheme = new Schema({
         type: String,
         required: true
       }
-  }]
+  }],
+  restore: {
+    type: String,
+  },
+  avatar: {
+    type: Buffer
+  }
 }, {
   timestamps: true
 });
@@ -49,6 +55,16 @@ userScheme.methods.generateAuthToken = async function() {
   const token = jwt.sign({ _id: user._id.toString() }, config.secret);
 
   user.tokens = user.tokens.concat({ token });
+  await user.save();
+
+  return token;
+};
+
+userScheme.methods.restoreToken = async function() {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, config.secret);
+
+  user.restore = token;
   await user.save();
 
   return token;

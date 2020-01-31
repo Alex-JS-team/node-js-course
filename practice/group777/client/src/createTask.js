@@ -49,15 +49,16 @@ export default function CreateTask(props) {
       }
     })
       .then(() => {
-        setTasks(tasks.filter(el=>el._id != id))
+        setTasks(tasks.filter(el=>el._id !== id))
         console.log(id)
       })
   }
 
   return (
+
       <>
         <hr />
-        <form onSubmit={e=>task(e)}>
+          <form onSubmit={e=>task(e)}>
           <textarea onChange={e=>setTitle(e.target.value)}></textarea>
           <input type='submit' value='Отправить'/>
         </form>

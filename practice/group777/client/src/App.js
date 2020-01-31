@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import Registration from "./Registration";
-import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./Login";
-import isEmpty from "validator/es/lib/isEmpty";
 import CreateTask from "./createTask";
+import Avatar from './Avatar'
 
 
 function App(props) {
 
   const [user, setUser] = useState({});
-  const [redirectStatus, setRedirectStatus] = useState(true)
-  const [loader, setLoader] = useState(true);
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     if(localStorage.getItem('tokenApi')) {
@@ -26,26 +23,26 @@ function App(props) {
         setUser(data.user)
       })
     }else {
-      //document.location.href ='/login'
+      setStatus(true)
     }
 
   }, []);
 
-
-
   return (
-    <BrowserRouter>
-      <Route exact={true} path='/reg' component={Registration}/>
-      <Route exact={true} path='/login' component={Login}/>
-      <Route exact={true} path='/' render={()=>
-        <div className='wrap'>
-          <p>{user.name}</p>
-          <p>{user.age}</p>
-          <p>{user.email}</p>
-          <CreateTask/>
-        </div>
-      }/>
-    </BrowserRouter>
+      <>
+        {
+          status ?
+              <Login/>
+              :
+              <div className='wrap'>
+                <p>{user.name}</p>
+                <p>{user.age}</p>
+                <p>{user.email}</p>
+                <Avatar id={user._id}/>
+                <CreateTask/>
+              </div>
+        }
+      </>
   );
 }
 
