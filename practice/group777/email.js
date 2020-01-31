@@ -8,14 +8,15 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-function restorePassword(email) {
+function restorePassword(email, token) {
+  const url = `/restore/${token}`;
   var mailOptions = {
     from: 'nodejs',
-    to: 'xxx44552@gmail.com',
+    to: email,
     subject: 'Восстановление пароля',
     html: `
       <p>Для ввостановления пароля перейдите по</p>
-      <a href="wadwad">ссылке</a> 
+      <a href=${url}>ссылке</a> 
     `
   };
 
@@ -28,6 +29,4 @@ function restorePassword(email) {
   });
 }
 
-restorePassword('xxx44552@gmail.com')
-
-//module.exports = restorePassword;
+module.exports = restorePassword;
