@@ -7,29 +7,29 @@ const multer = require('multer')
 const app = express()
 const port = process.env.PORT || 3000
 
-const upload = multer({
-    dest: 'images',
-    limits: {
-        fileSize: 1000000
-    },
-    fileFilter(req, file, cb) {
-        if (!file.originalname.endsWith('.jpg')) {
-            return cb(new Error('upload jpg'))
-        }
+// const upload = multer({
+//     dest: 'images',
+//     limits: {
+//         fileSize: 1000000
+//     },
+//     fileFilter(req, file, cb) {
+//         if (!file.originalname.endsWith('.jpg')) {
+//             return cb(new Error('upload jpg'))
+//         }
 
-        cb(undefined, true)
-    }
-})
+//         cb(undefined, true)
+//     }
+// })
 
-const errorMidd = (req, res, next) => {
-    throw new Error('erorroro');
-}
+// const errorMidd = (req, res, next) => {
+//     throw new Error('erorroro');
+// }
 
-app.post('/upload', errorMidd, (req, res) => {
-    res.status(200).send()
-}, (error, req, res, next) => {
-    res.status(400).send({error: error.message})
-})
+// app.post('/upload', errorMidd, (req, res) => {
+//     res.status(200).send()
+// }, (error, req, res, next) => {
+//     res.status(400).send({error: error.message})
+// })
 
 // app.post('/upload', upload.single('upload'), (req, res) => {
 //     res.send()
