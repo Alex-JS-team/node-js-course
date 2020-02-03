@@ -40,9 +40,7 @@ const userScheme = new Schema({
         required: true
       }
   }],
-  restore: {
-    type: String,
-  },
+  restore: String,
   avatar: {
     type: Buffer
   }

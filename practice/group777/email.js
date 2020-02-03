@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
 });
 
 function restorePassword(email, token) {
-  const url = `/restore/${token}`;
+  const url = `http://localhost:5000/restore/${token}`;
   var mailOptions = {
     from: 'nodejs',
     to: email,
