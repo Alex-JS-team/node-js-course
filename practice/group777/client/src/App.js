@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Login from "./Login";
 import CreateTask from "./createTask";
 import Avatar from './Avatar'
+import Confirm from "./confirmEmail";
 
 
 function App(props) {
@@ -20,7 +21,7 @@ function App(props) {
           'Accept': 'application/json'
         }
       }).then( res => res.json()).then(data => {
-        setUser(data.user)
+        setUser(data.user);
       })
     }else {
       setStatus(true)
@@ -35,6 +36,7 @@ function App(props) {
               <Login/>
               :
               <div className='wrap'>
+                {user.confirm ? user.confirm.status ? null : <Confirm/> : null}
                 <p>{user.name}</p>
                 <p>{user.age}</p>
                 <p>{user.email}</p>

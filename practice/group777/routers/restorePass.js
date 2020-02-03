@@ -11,7 +11,7 @@ router.post('/restore', async function (req, res) {
   if(email) {
     const user = await User.findOne({email});
     const token = await user.restoreToken();
-    sendMail(user.email, token);
+    sendMail.restorePassword(user.email, token);
     res.sendStatus(200)
   }else {
     res.sendStatus(500)

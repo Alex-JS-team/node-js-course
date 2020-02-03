@@ -9,14 +9,12 @@ const auth = require('./../midlleware/auth');
 router.get('/api', auth, async function (req, res) {
   // const users = await User.find();
   const id = mongoose.Types.ObjectId(req.user.id)
-  console.log(id, '-*-*-')
   const tasks = await Task.find({owner: id});
   // const json = [{
   //   users: users,
   //   tasks: tasks,
   // }
   // ];
-  console.log(tasks)
   res.send({
     user: req.user,
     tasks

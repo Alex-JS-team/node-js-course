@@ -16,6 +16,16 @@ const userScheme = new Schema({
     min: 1,
     max: 150
   },
+  confirm: {
+    status: {
+      type: Boolean,
+      default: false
+    },
+    token: {
+      type: String
+    }
+  }
+  ,
   email: {
     type: String,
     required: true,
@@ -67,6 +77,7 @@ userScheme.methods.restoreToken = async function() {
 
   return token;
 };
+
 
 userScheme.pre('save', async function (next) {
   const user = this;

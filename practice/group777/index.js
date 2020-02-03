@@ -7,6 +7,7 @@ const apiRouter = require('./routers/api');
 const uploadRouter = require('./routers/upload');
 const loginRouter = require('./routers/login');
 const restoreRouter = require('./routers/restorePass');
+const confirmRouter = require('./routers/confirmEmail');
 const hbs = require('hbs');
 const path = require('path');
 
@@ -31,5 +32,6 @@ app.use(apiRouter);
 app.use(loginRouter);
 app.use(uploadRouter);
 app.use(restoreRouter);
+app.use(confirmRouter);
 
 app.listen(port, () => console.log(`Start listening on port ${port}!`));
