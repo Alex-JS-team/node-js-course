@@ -20,8 +20,14 @@ router.post('/task', auth, function (req, res) {
       });
 });
 
-router.get('/task/:id', async function (req, res) {
-  const task = await Task.find({_id: req.params.id});
+router.post('/task/:id', auth, async function (req, res) {
+  const task = await Task.findById(req.params.id);
+  console.log(req.body.completed)
+
+  task.status = req.body.completed;
+  await task.save().then(task => console.log(task));
+
+
   res.send(task)
 });
 

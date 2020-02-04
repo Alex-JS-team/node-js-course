@@ -6,16 +6,6 @@ const config = require('./../config');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('./../email');
 
-router.get('/users', async function (req, res) {
-  const users = await User.find();
-  res.send(users)
-});
-
-router.get('/user/:id', async function (req, res) {
-  const user = await User.findOne({_id: req.params.id});
-  res.send(user)
-});
-
 router.post('/registration', async function (req, res) {
   if(!req.body) return res.sendStatus(500);
   const user = new User({
@@ -54,6 +44,33 @@ router.get('/user/:id/avatar', async (req, res) => {
   }
 });
 
+router.put('/user/edit', auth, async(req, res) => {
+  const updates = Object.keys(req.body).filter(i=>req.body[i] !== null);
+  console.log(updates, '---')
+  const allowedUpdates = ['name', 'email', 'password', 'age'];
+  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
+
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: 'Invalid updates!' });
+  }
+
+  try {
+    const user = await User.findById(req.user.id);
+
+    updates.forEach((update) => user[update] = req.body[update]);
+
+    await user.save();
+
+    if (!user) {
+      return res.status(404).send();
+    }
+
+    res.send(user);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 
 module.exports = router;

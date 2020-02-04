@@ -5,6 +5,10 @@ export default function CreateTask(props) {
   const [title, setTitle] = useState(null);
   const [tasks, setTasks] = useState([]);
   const token = localStorage.getItem('tokenApi');
+  const step = 5;
+  let skip = step;
+
+  const completedTask = {textDecorationLine: 'line-through'};
 
   useEffect(()=> {
     fetch('/api', {
@@ -52,8 +56,26 @@ export default function CreateTask(props) {
         setTasks(tasks.filter(el=>el._id !== id))
         console.log(id)
       })
+  };
+
+  function setChecked(e) {
+    const value = e.target.checked;
+    const id = e.target.dataset.id;
+    fetch(`/task/${id}/?completed=${value}`, {
+      method: 'post',
+      body: JSON.stringify({completed: value}),
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }).then((res)=>console.log(res))
   }
 
+  function showMoreTask() {
+
+  }
+  
   return (
 
       <>
@@ -68,12 +90,13 @@ export default function CreateTask(props) {
           tasks.map(({title, status, _id}) => {
             return <div key={_id} className='task'>
               <div>
-                <span>{title}</span><span> ||| status: {status.toString()}</span>
+                <span className='title' style={status?completedTask:null}>{title}</span><span> ||| status: <input data-id={_id} type='checkbox' onChange={setChecked} defaultChecked={status}/></span>
                 <button data-id={_id} onClick={e=>del(e)}>del</button>
               </div>
             </div>
           })
         }
+        <button>Показать еще</button>
       </>
   );
 }

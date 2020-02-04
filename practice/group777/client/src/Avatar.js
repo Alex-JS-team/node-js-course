@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-export default function Avatar(props) {
+export default function Avatar() {
 
   const [file, setFile] = useState(null);
   const token = localStorage.getItem('tokenApi');
@@ -21,7 +21,6 @@ export default function Avatar(props) {
 
   return (
     <>
-      <img alt='avatar' src={`/user/${props.id}/avatar`} />
       <form onSubmit={img}>
         <input type='file' onChange={e=>setFile(e.target.files[0])}/>
         <input type='submit' value='Save'/>

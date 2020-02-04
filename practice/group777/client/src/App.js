@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
+import {NavLink} from 'react-router-dom'
 import Login from "./Login";
 import CreateTask from "./createTask";
-import Avatar from './Avatar'
 import Confirm from "./confirmEmail";
+import Edit from "./editUser";
 
 
-function App(props) {
+export default function App() {
 
   const [user, setUser] = useState({});
   const [status, setStatus] = useState(false);
@@ -40,12 +41,11 @@ function App(props) {
                 <p>{user.name}</p>
                 <p>{user.age}</p>
                 <p>{user.email}</p>
-                <Avatar id={user._id}/>
+                <img alt='avatar' src={`/user/${user._id}/avatar`} />
+                <NavLink exact to="/edit">Edit user info</NavLink>
                 <CreateTask/>
               </div>
         }
       </>
   );
 }
-
-export default App;
