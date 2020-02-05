@@ -4,6 +4,7 @@ import Login from "./Login";
 import CreateTask from "./createTask";
 import Confirm from "./confirmEmail";
 import Edit from "./editUser";
+import Chat from "./Chat";
 
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
                 <img alt='avatar' src={`/user/${user._id}/avatar`} />
                 <NavLink exact to="/edit">Edit user info</NavLink>
                 <CreateTask/>
+                <Chat user={user}/>
               </div>
         }
       </>

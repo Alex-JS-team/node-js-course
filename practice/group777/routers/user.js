@@ -5,6 +5,8 @@ const auth = require('./../midlleware/auth');
 const config = require('./../config');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('./../email');
+const mongoose = require('mongoose');
+
 
 router.post('/registration', async function (req, res) {
   if(!req.body) return res.sendStatus(500);
@@ -34,13 +36,14 @@ router.post('/registration', async function (req, res) {
 
 router.get('/user/:id/avatar', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ _id: mongoose.Types.ObjectId(req.params.id)});
+
     if(!user || !user.avatar) throw new Error('Error avatar');
 
     res.set('Content-Type', 'image/jpg');
     res.send(user.avatar);
   }catch (e) {
-    console.log(e)
+    //console.log(e)
   }
 });
 

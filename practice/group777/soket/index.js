@@ -9,12 +9,16 @@ const server = http.createServer(app);
 const io = socket(server);
 
 let count = 0;
-let msg = [{text: 'Lorem'}];
+//let msg = [{text: 'Lorem'}];
 
 app.use(express.static(__dirname + '/public'));
 
 io.on('connection', (socket) => {
   console.log('New Socket');
+  socket.messArr = [];
+
+
+  const color = `#${(Math.random().toString(16) + '000000').substring(2,8).toUpperCase()}`;
 
   socket.emit('countUpdated', count);
 
@@ -23,7 +27,12 @@ io.on('connection', (socket) => {
     io.emit('countUpdated', count)
   })
 
-  socket.emit('sendMess', msg)
+  socket.on('sendMess', (msg) => {
+    socket.messArr.push(msg)
+    console.log(socket.id, '------')
+    console.log(msg);
+    io.emit('addMess', {msg, color})
+  })
 
 });
 
