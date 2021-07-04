@@ -2,63 +2,35 @@ const express = require('express');
 const path = require('path');
 const config = require('./config.js');
 const data = require('./data');
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const hbs = require("hbs");
-const utils = require('./utils');
-var bodyParser = require('body-parser')
-
 
 const app = express();
 
-// create application/json parser
-var jsonParser = bodyParser.json()
 
-// create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-app.use('/hbs', (req, res) => {
-  res.render('index.hbs')
-})
 
-// app.get('/weather', ((req, res) => {
-//   const cityName = req.query.city;
-//   if(!cityName) {
-//     res.sendStatus(400)
-//   } else {
-//     utils.getWeatherByString(cityName, (error, weather) => {
-//       if (error) {
-//         res.sendStatus(500);
-//       } else {
-//         res.status(200).render('weather.hbs', {
-//           city: weather
-//         })
-//       }
-//     });
-//   }
-//
-// }));
+const jsonParser = bodyParser.json();
 
-app.post('/getweather', urlencodedParser, ((req, res) => {
-  console.log(req.body);
-  // if(!cityName) {
-  //   res.sendStatus(400)
-  // } else {
-  //   utils.getWeatherByString(cityName, (error, weather) => {
-  //     if (error) {
-  //       res.sendStatus(500);
-  //     } else {
-  //       res.status(200).json(weather)
-  //     }
-  //   });
-  // }
-
-}));
-
+//Увеличиваю позволенный размер файла
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 app.set("view engine", "hbs");
 hbs.registerPartials(__dirname + "/views/partials");
 
+mongoose.connect("mongodb://localhost:27017/users", { useNewUrlParser: true });
+
+const userScheme = new Schema({
+  name: String,
+  age: Number
+});
+const User = mongoose.model("User", userScheme);
+
 var err = '';
 
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/public'), {index: false}));
 
 function error404(req, res, next) {
   err = `https://${req.hostname+req.url}`;
@@ -71,7 +43,34 @@ app.get('/api', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html' , { root : __dirname+'/public'});
+  User.find({}, function (error, response) {
+    if(error) throw error;
+    res.render('index.hbs', {
+      arr: response
+    })
+  })
+});
+
+app.get('/form', (req, res) => {
+  res.sendFile('form.html' , { root : __dirname+'/public'});
+});
+
+app.post('/save', jsonParser, function(req, res){
+  if(!req.body) return res.sendStatus(500);
+  const user = new User({
+    name: req.body.userName,
+    age: req.body.age
+  });
+  user.save().then(user=>console.log(`Save: ${user}`));
+  res.sendStatus(200);
+});
+
+app.post('/del', jsonParser, function(req, res){
+  if(!req.body) return res.sendStatus(400);
+  const id = req.body.id;
+  User.deleteOne({_id: id}).then(del => console.log(del) );
+  console.log(id)
+  res.sendStatus(200)
 });
 
 app.use(error404);
@@ -81,3 +80,4 @@ app.use(function(req, res) {
 });
 
 app.listen(config.port, ()=>console.log('Start on port 3000..'));
+
